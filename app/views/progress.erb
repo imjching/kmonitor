@@ -1,0 +1,73 @@
+<main role="main" class="container">
+  <h1 class="mt-5">Kattis Tracker</h1>
+  <p class="lead"><%= @u.name %>'s Kattis Progress</p>
+
+  <div class="alert alert-sm alert-primary" role="alert">
+    The data updates once every 24 hours.
+  </div>
+
+  <canvas id="myChart"></canvas><br>
+
+  <table class="table table-sm">
+    <thead>
+      <th scope="col">Fetched at</th>
+      <th scope="col">Rank</th>
+      <th scope="col">Score</th>
+    </thead>
+    <tbody>
+      <% @u.progress_entries.each do |progress| %>
+        <tr>
+          <td scope="row"><%= progress.created_at %></td>
+          <td><%= progress.rank %></td>
+          <td><%= progress.score %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <hr><br>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script>
+  var ctx = document.getElementById("myChart");
+  var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [{
+        data: [
+          <% @u.progress_entries.each do |progress| %>
+          { x: "<%= progress.updated_at.iso8601 %>", y: "<%= progress.score %>" },
+          <% end %>
+        ],
+        lineTension: 0,
+        backgroundColor: "transparent",
+        borderColor: "#007bff",
+        borderWidth: 4,
+        pointBackgroundColor: "#007bff"
+      }]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          type: "time",
+          time: {
+            unit: "day",
+            unitStepSize: 1,
+            displayFormats: {
+              "day": "MMM DD"
+            }
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            beginAtZero: false
+          }
+        }]
+      },
+      legend: {
+        display: false,
+      }
+    }
+  });
+</script>

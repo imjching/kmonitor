@@ -1,8 +1,5 @@
 get "/" do
-  """
-  Visit http://kmonitor.herokuapp.com/progress/USERNAME to track your record.
-  It updates once every 24 hours.
-  """
+  erb :index
 end
 
 get "/progress/:username" do |username|
@@ -18,5 +15,5 @@ get "/progress/:username" do |username|
       return "Invalid username!"
     end
   end
-  erb :index
+  erb :progress
 end
