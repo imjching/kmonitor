@@ -11,6 +11,11 @@ require 'nokogiri'
 BASE_URL = "https://open.kattis.com/users"
 
 User.find_each do |user|
-  doc = User.fetch_page(user.name)
-  User.store_kattis_data(user, doc)
+  begin
+    doc = User.fetch_page(user.name)
+    User.store_kattis_data(user, doc)
+  rescue
+    # do nothing
+    puts "Failed to fetch data for #{user.name}"
+  end
 end
